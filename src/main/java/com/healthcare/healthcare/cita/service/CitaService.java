@@ -9,7 +9,7 @@ import com.healthcare.healthcare.medico.entity.Medico;
 import com.healthcare.healthcare.medico.repository.MedicoRepository;
 import com.healthcare.healthcare.paciente.entity.Paciente;
 
-import com.healthcare.healthcare.paciente.reppository.PacienteRepository;
+import com.healthcare.healthcare.paciente.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
