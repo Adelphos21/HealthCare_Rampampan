@@ -1,6 +1,7 @@
 package com.healthcare.healthcare.enfermero.entity;
 
 
+import com.healthcare.healthcare.medico.entity.Medico;
 import com.healthcare.healthcare.usuario.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
