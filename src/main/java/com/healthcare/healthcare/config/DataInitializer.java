@@ -1,6 +1,9 @@
 package com.healthcare.healthcare.config;
 
 
+import com.healthcare.healthcare.usuario.entity.Role;
+import com.healthcare.healthcare.usuario.entity.User;
+import com.healthcare.healthcare.usuario.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
