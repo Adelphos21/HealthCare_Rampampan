@@ -3,8 +3,11 @@ package com.healthcare.healthcare.paciente.service;
 import com.healthcare.healthcare.paciente.dto.PacienteRequest;
 import com.healthcare.healthcare.paciente.dto.PacienteResponse;
 import com.healthcare.healthcare.paciente.entity.Paciente;
+import com.healthcare.healthcare.paciente.event.EliminarPacienteEmailEvent;
+import com.healthcare.healthcare.paciente.event.RegistrarPacienteEmailEvent;
 import com.healthcare.healthcare.paciente.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.stream.Collectors;
 public class PacienteService {
 
     private final PacienteRepository repository;
-
+    private final ApplicationEventPublisher applicationEventPublisher;
     public PacienteResponse registrar(PacienteRequest request) {
         Paciente paciente = Paciente.builder()
                 .nombre(request.getNombre())
@@ -25,6 +28,7 @@ public class PacienteService {
                 .correo(request.getCorreo())
                 .build();
         repository.save(paciente);
+        applicationEventPublisher.publishEvent(new RegistrarPacienteEmailEvent(paciente));
         return PacienteResponse.builder()
                 .id(paciente.getId())
                 .nombre(paciente.getNombre())
@@ -49,6 +53,8 @@ public class PacienteService {
     }
 
     public void eliminar(Long id) {
+        Paciente paciente = repository.findById(id).orElseThrow();
         repository.deleteById(id);
+        applicationEventPublisher.publishEvent(new EliminarPacienteEmailEvent(paciente));
     }
 }

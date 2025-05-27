@@ -3,8 +3,11 @@ package com.healthcare.healthcare.medico.service;
 import com.healthcare.healthcare.medico.dto.MedicoRequest;
 import com.healthcare.healthcare.medico.dto.MedicoResponse;
 import com.healthcare.healthcare.medico.entity.Medico;
+import com.healthcare.healthcare.medico.event.EliminarMedicoEmailEvent;
+import com.healthcare.healthcare.medico.event.RegistrarMedicoEmailEvent;
 import com.healthcare.healthcare.medico.repository.MedicoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 public class MedicoService {
 
     private final MedicoRepository medicoRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 //    private final EspecialidadRepository especialidadRepository;
 
     public MedicoResponse registrar(MedicoRequest request) {
@@ -33,7 +37,7 @@ public class MedicoService {
                 .build();
 
         medicoRepository.save(medico);
-
+        applicationEventPublisher.publishEvent(new RegistrarMedicoEmailEvent(medico));
         return MedicoResponse.builder()
                 .id(medico.getId())
                 .nombre(medico.getNombre())
@@ -54,6 +58,8 @@ public class MedicoService {
     }
 
     public void eliminar(Long id) {
+        Medico medico = medicoRepository.findById(id).orElseThrow(()-> new RuntimeException("Medico no encontrado"));
         medicoRepository.deleteById(id);
+        applicationEventPublisher.publishEvent(new EliminarMedicoEmailEvent(medico));
     }
 }
