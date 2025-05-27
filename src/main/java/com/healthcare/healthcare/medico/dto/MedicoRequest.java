@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.medico.dto;
 
+import com.healthcare.healthcare.medico.entity.Especialidad;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +12,5 @@ public class MedicoRequest {
     private String dni;
     private String telefono;
     private String correo;
-    private Long especialidadId;
+    private Especialidad especialidadId;
 }

@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.medico.dto;
 
+import com.healthcare.healthcare.medico.entity.Especialidad;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,5 +10,5 @@ public class MedicoResponse {
     private Long id;
     private String nombre;
     private String apellido;
-    private String especialidad;
+    private Especialidad especialidad;
 }

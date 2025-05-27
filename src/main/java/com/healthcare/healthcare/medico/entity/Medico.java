@@ -1,11 +1,9 @@
 package com.healthcare.healthcare.medico.entity;
 
 import com.healthcare.healthcare.enfermero.entity.Enfermero;
-import com.healthcare.healthcare.especialidad.entity.Especialidad;
 import com.healthcare.healthcare.usuario.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import lombok.experimental.SuperBuilder;
 
@@ -22,8 +20,6 @@ public class Medico extends User {
 
     private String telefono;
     private String correo;
-    @ManyToOne
-    @JoinColumn(name = "especialidad_id")
     private Especialidad especialidad;
 
     @OneToMany
