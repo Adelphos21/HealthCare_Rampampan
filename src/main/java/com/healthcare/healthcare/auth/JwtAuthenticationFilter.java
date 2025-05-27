@@ -28,12 +28,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
+        String path = request.getServletPath();
+
+        // Ignorar rutas públicas
+        if (path.startsWith("/api/auth") || path.startsWith("/api/pacientes") || path.startsWith("/ping") || path.startsWith("/h2-console")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response); // sigue el flujo sin validar
+            filterChain.doFilter(request, response); // sigue sin validar
             return;
         }
 
