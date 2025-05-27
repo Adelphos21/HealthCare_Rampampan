@@ -47,7 +47,7 @@ public class EmailListener {
         emailService.sendHtmlMessage(
                 paciente.getCorreo(),
                 "Registro exitoso de paciente",
-                "registro-paciente",
+                "registrar-paciente",
                 context
         );
     }
@@ -80,7 +80,7 @@ public class EmailListener {
         emailService.sendHtmlMessage(
                 paciente.getCorreo(),
                 "Historial de tus citas médicas",
-                "historial-citas-email",
+                "historial-paciente",
                 context
         );
     }
