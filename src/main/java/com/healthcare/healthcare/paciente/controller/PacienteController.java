@@ -5,6 +5,7 @@ import com.healthcare.healthcare.paciente.dto.PacienteResponse;
 import com.healthcare.healthcare.cita.service.CitaService;
 import com.healthcare.healthcare.cita.dto.CitaResponse;
 import com.healthcare.healthcare.paciente.service.PacienteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class PacienteController {
     private final CitaService citaService;
 
     @PostMapping
-    public PacienteResponse registrar(@RequestBody PacienteRequest request) {
+    public PacienteResponse registrar(@Valid @RequestBody PacienteRequest request) {
         return pacienteService.registrar(request);
     }
 
