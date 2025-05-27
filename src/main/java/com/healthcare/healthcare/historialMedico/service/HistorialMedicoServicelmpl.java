@@ -8,7 +8,7 @@ import java.util.List;
 import com.healthcare.healthcare.historialMedico.entity.HistorialMedico;
 import com.healthcare.healthcare.historialMedico.repository.HistorialMedicoRepository;
 import com.healthcare.healthcare.paciente.entity.Paciente;
-import com.healthcare.healthcare.paciente.reppository.PacienteRepository;
+import com.healthcare.healthcare.paciente.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,14 +33,14 @@ public class HistorialMedicoServicelmpl implements HistorialMedicoService {
                 .tratamiento(request.getTratamiento())
                 .build();
 
-        historial = historialRepo.save(historial);
+        historial = historialMedicoRepo.save(historial);
 
         return toResponse(historial);
     }
 
     @Override
     public List<HistorialMedicoResponse> listarPorPaciente(Long pacienteId) {
-        return historialRepo.findByPacienteId(pacienteId)
+        return historialMedicoRepo.findByPacienteId(pacienteId)
                 .stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());

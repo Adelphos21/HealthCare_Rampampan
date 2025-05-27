@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.config;
 
+import com.healthcare.healthcare.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

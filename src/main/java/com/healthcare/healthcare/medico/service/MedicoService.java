@@ -10,19 +10,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.healthcare.healthcare.especialidad.entity.Especialidad;
-import com.healthcare.healthcare.especialidad.repository.EspecialidadRepository;;
 
 @Service
 @RequiredArgsConstructor
 public class MedicoService {
 
     private final MedicoRepository medicoRepository;
-    private final EspecialidadRepository especialidadRepository;
+//    private final EspecialidadRepository especialidadRepository;
 
     public MedicoResponse registrar(MedicoRequest request) {
-        Especialidad especialidad = especialidadRepository.findById(request.getEspecialidadId())
-                .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
+        /*Especialidad especialidad = especialidadRepository.findById(request.getEspecialidadId())
+                .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));*/
 
         Medico medico = Medico.builder()
                 .nombre(request.getNombre())
@@ -30,7 +28,7 @@ public class MedicoService {
                 .dni(request.getDni())
                 .telefono(request.getTelefono())
                 .correo(request.getCorreo())
-                .especialidad(especialidad)
+                .especialidad(request.getEspecialidadId())
                 .estado(true)
                 .build();
 
@@ -40,7 +38,7 @@ public class MedicoService {
                 .id(medico.getId())
                 .nombre(medico.getNombre())
                 .apellido(medico.getApellido())
-                .especialidad(medico.getEspecialidad().getNombre())
+                .especialidad(medico.getEspecialidad())
                 .build();
     }
 
@@ -50,7 +48,7 @@ public class MedicoService {
                         .id(m.getId())
                         .nombre(m.getNombre())
                         .apellido(m.getApellido())
-                        .especialidad(m.getEspecialidad().getNombre())
+                        .especialidad(m.getEspecialidad())
                         .build()
                 ).collect(Collectors.toList());
     }
