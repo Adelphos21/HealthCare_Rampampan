@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pago Registrado</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 24px 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .content {
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .content p {
+            font-size: 16px;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .info-box {
+            background-color: #f2f2f2;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .info-box p {
+            margin: 10px 0;
+        }
+
+        .info-box strong {
+            display: inline-block;
+            width: 160px;
+            color: #333;
+        }
+
+        .footer {
+            background-color: #eeeeee;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>💳 ¡Pago Registrado con Éxito!</h1>
+    </div>
+    <div class="content">
+        <h2>Hola <span th:text="${nombre} + ' ' + ${apellido}">Paciente</span>,</h2>
+        <p>Tu pago ha sido registrado correctamente. Aquí están los detalles:</p>
+
+        <div class="info-box">
+            <p><strong>Fecha de la cita:</strong> <span th:text="${fechaCita}">dd/MM/yyyy HH:mm</span></p>
+            <p><strong>Monto pagado:</strong> S/. <span th:text="${monto}">00.00</span></p>
+            <p><strong>Método de pago:</strong> <span th:text="${metodoPago}">Método</span></p>
+            <p><strong>Pagado:</strong> <span th:text="${pagado}">Sí/No</span></p>
+            <p><strong>Fecha de registro:</strong> <span th:text="${fechaPago}">dd/MM/yyyy HH:mm</span></p>
+        </div>
+
+        <p>Gracias por realizar tu pago. Si tienes alguna duda, no dudes en contactarnos.</p>
+        <p>Atentamente,<br><strong>Health Care</strong></p>
+    </div>
+    <div class="footer">
+        &copy; 2025 Health Care. Todos los derechos reservados.
+    </div>
+</div>
+</body>
+</html>
