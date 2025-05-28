@@ -11,6 +11,7 @@ import com.healthcare.healthcare.usuario.entity.User;
 import com.healthcare.healthcare.usuario.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -29,12 +30,13 @@ public class PacienteController {
     private final PacienteRepository pacienteRepository;
 
     @PostMapping
-    public PacienteResponse registrar(@Valid @RequestBody PacienteRequest request) {
-        return pacienteService.registrar(request);
+    public ResponseEntity<PacienteResponse> registrar(@Valid @RequestBody PacienteRequest request) {
+        PacienteResponse response = pacienteService.registrar(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MEDICO')")
     public List<PacienteResponse> listar() {
         return pacienteService.listar();
     }
@@ -49,7 +51,7 @@ public class PacienteController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MEDICO')")
     @GetMapping("/{id}/citas")
     public List<CitaResponse> historialCitas(@PathVariable Long id) {
         return citaService.listarPorPaciente(id);

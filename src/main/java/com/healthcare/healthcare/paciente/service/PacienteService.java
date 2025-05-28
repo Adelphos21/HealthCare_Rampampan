@@ -26,6 +26,9 @@ public class PacienteService {
         if (repository.existsByDni(request.getDni())) {
             throw new IllegalArgumentException("Ya existe un usuario con ese DNI.");
         }
+        if (repository.existsByCorreo(request.getCorreo())) {
+            throw new IllegalArgumentException("Ya existe un usuario con ese correo.");
+        }
 
         Paciente paciente = Paciente.builder()
                 .nombre(request.getNombre())
