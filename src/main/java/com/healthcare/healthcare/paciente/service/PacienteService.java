@@ -3,10 +3,13 @@ package com.healthcare.healthcare.paciente.service;
 import com.healthcare.healthcare.paciente.dto.PacienteRequest;
 import com.healthcare.healthcare.paciente.dto.PacienteResponse;
 import com.healthcare.healthcare.paciente.entity.Paciente;
+import com.healthcare.healthcare.paciente.event.EliminarPacienteEmailEvent;
+import com.healthcare.healthcare.paciente.event.RegistrarPacienteEmailEvent;
 import com.healthcare.healthcare.paciente.repository.PacienteRepository;
 import com.healthcare.healthcare.usuario.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.stream.Collectors;
 public class PacienteService {
     private final PasswordEncoder passwordEncoder;
     private final PacienteRepository repository;
-
+    private final ApplicationEventPublisher applicationEventPublisher;
     public PacienteResponse registrar(PacienteRequest request) {
 
         if (repository.existsByDni(request.getDni())) {
@@ -36,6 +39,7 @@ public class PacienteService {
                 .username(request.getCorreo())
                 .build();
         repository.save(paciente);
+        applicationEventPublisher.publishEvent(new RegistrarPacienteEmailEvent(paciente));
         return PacienteResponse.builder()
                 .id(paciente.getId())
                 .nombre(paciente.getNombre())
@@ -60,6 +64,8 @@ public class PacienteService {
     }
 
     public void eliminar(Long id) {
+        Paciente paciente = repository.findById(id).orElseThrow();
         repository.deleteById(id);
+        applicationEventPublisher.publishEvent(new EliminarPacienteEmailEvent(paciente));
     }
 }

@@ -1,12 +1,14 @@
 package com.healthcare.healthcare.cita.controller;
 
 import com.healthcare.healthcare.cita.dto.CambioEstadoRequest;
+import com.healthcare.healthcare.cita.dto.ChangeCitaRequest;
 import com.healthcare.healthcare.cita.dto.CitaRequest;
 import com.healthcare.healthcare.cita.dto.CitaResponse;
 import com.healthcare.healthcare.cita.entity.EstadoCita;
 import com.healthcare.healthcare.cita.service.CitaService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +53,11 @@ public class CitaController {
             return citaService.listarPorEstado(estado);
         }
         return citaService.listar(); // listado completo
+    }
+    @PatchMapping("/{id}/cambiar-fecha")
+    @PreAuthorize("hasRole('ADMIN, PACIENTE')")
+    public ResponseEntity<CitaResponse> cambiarFechaCita(@PathVariable Long id, @RequestBody ChangeCitaRequest request) {
+        CitaResponse response = citaService.cambiar(id, request);
+        return ResponseEntity.ok(response);
     }
 }

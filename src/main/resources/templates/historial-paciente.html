@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Citas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f8fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #2a7ae2;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #2a7ae2;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Historial de Citas</h2>
+    <p>Hola <strong th:text="${nombre}">Paciente</strong>, este es tu historial de citas registrado en el sistema.</p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Asunto</th>
+            <th>Fecha de Cita</th>
+            <th>Fecha de Reserva</th>
+            <th>Médico</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cita : ${citas}">
+            <td th:text="${cita.asunto}">Asunto</td>
+            <td th:text="${#temporals.format(cita.fechaCita, 'dd/MM/yyyy')}">Fecha Cita</td>
+            <td th:text="${#temporals.format(cita.fechaReserva, 'dd/MM/yyyy')}">Fecha Reserva</td>
+            <td th:text="${cita.nombreMedico}">Médico</td>
+            <td th:text="${cita.estado}">Estado</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Gracias por confiar en nosotros. Health Care.</p>
+        <p>Atentamente,<br><strong>Health Care</strong></p>
+    </div>
+    <div class="footer">
+        &copy; 2025 Health Care. Todos los derechos reservados.
+    </div>
+</div>
+</body>
+</html>

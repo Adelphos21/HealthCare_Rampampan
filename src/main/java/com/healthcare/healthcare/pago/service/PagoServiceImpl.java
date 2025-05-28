@@ -5,8 +5,10 @@ import com.healthcare.healthcare.cita.repository.CitaRepository;
 import com.healthcare.healthcare.pago.dto.PagoRequest;
 import com.healthcare.healthcare.pago.dto.PagoResponse;
 import com.healthcare.healthcare.pago.entity.Pago;
+import com.healthcare.healthcare.pago.event.CreacionPagoEmailEvent;
 import com.healthcare.healthcare.pago.repository.PagoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class PagoServiceImpl implements PagoService {
 
     private final PagoRepository pagoRepository;
     private final CitaRepository citaRepository;
-
+    private final ApplicationEventPublisher applicationEventPublisher;
     @Override
     public PagoResponse crear(PagoRequest request) {
         Cita cita = citaRepository.findById(request.getCitaId())
@@ -32,7 +34,7 @@ public class PagoServiceImpl implements PagoService {
                 .build();
 
         pago = pagoRepository.save(pago);
-
+        applicationEventPublisher.publishEvent(new CreacionPagoEmailEvent(pago));
         return toResponse(pago);
     }
 
