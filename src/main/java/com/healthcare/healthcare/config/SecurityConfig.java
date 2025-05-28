@@ -1,9 +1,11 @@
 package com.healthcare.healthcare.config;
 
 import com.healthcare.healthcare.auth.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -29,9 +31,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/pacientes/**",
                                 "/h2-console/**",
                                 "/ping").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pacientes").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess
@@ -39,6 +41,17 @@ public class SecurityConfig {
                 )
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling(exception -> exception
+                .authenticationEntryPoint((req, res, authEx) -> {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.getWriter().write("{\"error\": \"Unauthorized\"}");
+                })
+                .accessDeniedHandler((req, res, accessDeniedEx) -> {
+                    res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    res.getWriter().write("{\"error\": \"Access Denied\"}");
+                })
+        );
 
         http.headers(headers -> headers.frameOptions(frame -> frame.disable())); // para consola H2
 

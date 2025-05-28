@@ -27,4 +27,7 @@ public class PacienteRequest {
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "El correo debe tener un formato válido")
     private String correo;
+
+    @NotBlank(message = "La contraseña no puede ser vacia")
+    private String password;
 }

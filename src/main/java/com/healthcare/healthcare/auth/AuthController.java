@@ -27,7 +27,7 @@ public class AuthController {
             );
 
             User user = (User) auth.getPrincipal();
-            return jwtService.generateToken(user.getUsername());
+            return jwtService.generateToken(user);
 
         } catch (AuthenticationException e) {
             return "Credenciales inválidas";
