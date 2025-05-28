@@ -4,7 +4,11 @@ import com.healthcare.healthcare.enfermero.dto.EnfermeroRequest;
 import com.healthcare.healthcare.enfermero.dto.EnfermeroResponse;
 import com.healthcare.healthcare.enfermero.entity.Enfermero;
 import com.healthcare.healthcare.enfermero.repository.EnfermeroRepository;
+import com.healthcare.healthcare.medico.dto.MedicoResponse;
+import com.healthcare.healthcare.medico.entity.Especialidad;
+import com.healthcare.healthcare.usuario.entity.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EnfermeroService {
 
+    private final PasswordEncoder passwordEncoder;
     private final EnfermeroRepository repository;
 
     public EnfermeroResponse registrar(EnfermeroRequest request) {
@@ -23,6 +28,9 @@ public class EnfermeroService {
                 .dni(request.getDni())
                 .telefono(request.getTelefono())
                 .correo(request.getCorreo())
+                .role(Role.PACIENTE)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .enabled(true)
                 .area(request.getArea())
                 .estado(true)
                 .build();
@@ -48,6 +56,17 @@ public class EnfermeroService {
                         .area(e.getArea())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public List<EnfermeroResponse> listarPorMedico(Long medicoId) {
+        return repository.findByMedicoId(medicoId).stream()
+                .map(m -> EnfermeroResponse.builder()
+                        .id(m.getId())
+                        .nombre(m.getNombre())
+                        .apellido(m.getApellido())
+                        .correo(m.getCorreo())
+                        .build()
+                ).collect(Collectors.toList());
     }
 
     public void eliminar(Long id) {
