@@ -1,6 +1,7 @@
 package com.healthcare.healthcare.usuario.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,11 +29,18 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String username;
 
+    @Column(name = "nombre")
     private String nombre;
+
+
+    @Column(name = "apellido")
     private String apellido;
-    @Column(unique = true)
+
+    @Column(name = "dni", unique = true)
     private String dni;
 
+
+    @Size(min = 6)
     private String password;
 
     @Enumerated(EnumType.STRING)
