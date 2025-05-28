@@ -30,11 +30,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        // Ignorar rutas públicas
-        if (path.startsWith("/api/auth") || path.startsWith("/api/pacientes") || path.startsWith("/ping") || path.startsWith("/h2-console")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+//        // Ignorar rutas públicas
+//        if (path.startsWith("/api/auth") || path.startsWith("/api/pacientes") || path.startsWith("/ping") || path.startsWith("/h2-console")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;

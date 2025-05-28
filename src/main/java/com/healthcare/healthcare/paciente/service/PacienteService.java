@@ -6,7 +6,9 @@ import com.healthcare.healthcare.paciente.entity.Paciente;
 import com.healthcare.healthcare.paciente.event.EliminarPacienteEmailEvent;
 import com.healthcare.healthcare.paciente.event.RegistrarPacienteEmailEvent;
 import com.healthcare.healthcare.paciente.repository.PacienteRepository;
+import com.healthcare.healthcare.usuario.entity.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,25 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PacienteService {
-
+    private final PasswordEncoder passwordEncoder;
     private final PacienteRepository repository;
     private final ApplicationEventPublisher applicationEventPublisher;
     public PacienteResponse registrar(PacienteRequest request) {
+
+        if (repository.existsByDni(request.getDni())) {
+            throw new IllegalArgumentException("Ya existe un usuario con ese DNI.");
+        }
+
         Paciente paciente = Paciente.builder()
                 .nombre(request.getNombre())
                 .apellido(request.getApellido())
                 .dni(request.getDni())
                 .telefono(request.getTelefono())
                 .correo(request.getCorreo())
+                .role(Role.PACIENTE)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .enabled(true)
+                .username(request.getCorreo())
                 .build();
         repository.save(paciente);
         applicationEventPublisher.publishEvent(new RegistrarPacienteEmailEvent(paciente));

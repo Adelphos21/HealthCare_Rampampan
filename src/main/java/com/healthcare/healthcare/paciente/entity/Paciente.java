@@ -23,7 +23,6 @@ import java.util.List;
 @SuperBuilder
 public class Paciente extends User {
 
-
     private String telefono;
     private String correo;
     @OneToMany
