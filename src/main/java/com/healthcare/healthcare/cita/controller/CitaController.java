@@ -7,7 +7,9 @@ import com.healthcare.healthcare.cita.dto.CitaResponse;
 import com.healthcare.healthcare.cita.entity.EstadoCita;
 import com.healthcare.healthcare.cita.service.CitaService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,41 +25,60 @@ public class CitaController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'PACIENTE')")
-    public CitaResponse registrar(@RequestBody CitaRequest request) {
-        return citaService.registrar(request);
+    public ResponseEntity<CitaResponse> registrar(@Valid @RequestBody CitaRequest request) {
+        CitaResponse response = citaService.registrar(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response); // 201
     }
 
     @GetMapping
-    public List<CitaResponse> listar() {
-        return citaService.listar();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<CitaResponse>> listar() {
+        return ResponseEntity.ok(citaService.listar()); // 200
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        if (!citaService.existePorId(id)) {
+            return ResponseEntity.notFound().build(); // 404 si no existe
+        }
         citaService.eliminar(id);
+        return ResponseEntity.noContent().build(); // 204
     }
 
     @PutMapping("/{id}/estado")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public CitaResponse cambiarEstado(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CitaResponse> cambiarEstado(
             @PathVariable Long id,
-            @RequestBody CambioEstadoRequest request
+            @RequestBody @Valid CambioEstadoRequest request
     ) {
-        return citaService.cambiarEstado(id, request.getNuevoEstado());
+        if (!citaService.existePorId(id)) {
+            return ResponseEntity.notFound().build(); // 404
+        }
+        CitaResponse response = citaService.cambiarEstado(id, request.getNuevoEstado());
+        return ResponseEntity.ok(response); // 200
     }
 
-    @GetMapping("/api/citas/estado")
-    public List<CitaResponse> listar(@RequestParam(required = false) EstadoCita estado) {
+    @GetMapping("/estado")
+    public ResponseEntity<List<CitaResponse>> listarPorEstado(
+            @RequestParam(required = false) EstadoCita estado
+    ) {
         if (estado != null) {
-            return citaService.listarPorEstado(estado);
+            return ResponseEntity.ok(citaService.listarPorEstado(estado)); // 200
         }
-        return citaService.listar(); // listado completo
+        return ResponseEntity.ok(citaService.listar()); // 200
     }
+
     @PatchMapping("/{id}/cambiar-fecha")
-    @PreAuthorize("hasRole('ADMIN, PACIENTE')")
-    public ResponseEntity<CitaResponse> cambiarFechaCita(@PathVariable Long id, @RequestBody ChangeCitaRequest request) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'PACIENTE')")
+    public ResponseEntity<CitaResponse> cambiarFechaCita(
+            @PathVariable Long id,
+            @RequestBody @Valid ChangeCitaRequest request
+    ) {
+        if (!citaService.existePorId(id)) {
+            return ResponseEntity.notFound().build(); // 404
+        }
         CitaResponse response = citaService.cambiar(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response); // 200
     }
 }
