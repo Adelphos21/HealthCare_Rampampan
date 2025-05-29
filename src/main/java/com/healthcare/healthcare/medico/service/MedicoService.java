@@ -1,5 +1,8 @@
 package com.healthcare.healthcare.medico.service;
 
+import com.healthcare.healthcare.exception.BadRequestException;
+import com.healthcare.healthcare.exception.ConflictException;
+import com.healthcare.healthcare.exception.NotFoundException;
 import com.healthcare.healthcare.medico.dto.MedicoRequest;
 import com.healthcare.healthcare.medico.dto.MedicoResponse;
 import com.healthcare.healthcare.medico.entity.Especialidad;
@@ -29,6 +32,12 @@ public class MedicoService {
     public MedicoResponse registrar(MedicoRequest request) {
         /*Especialidad especialidad = especialidadRepository.findById(request.getEspecialidadId())
                 .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));*/
+        if(!(medicoRepository.existsByDni(request.getDni()))){
+            throw new ConflictException("Ya existe un medico con ese DNI");
+        }
+        if(!isValidEmail(request.getCorreo())){
+            throw new BadRequestException("Correo no valido");
+        }
 
         if (medicoRepository.existsByDni(request.getDni())) {
             throw new IllegalArgumentException("Ya existe un usuario con ese DNI.");
@@ -84,8 +93,11 @@ public class MedicoService {
     }
 
     public void eliminar(Long id) {
-        Medico medico = medicoRepository.findById(id).orElseThrow(()-> new RuntimeException("Medico no encontrado"));
+        Medico medico = medicoRepository.findById(id).orElseThrow(()-> new NotFoundException("Medico no encontrado"));
         medicoRepository.deleteById(id);
         applicationEventPublisher.publishEvent(new EliminarMedicoEmailEvent(medico));
+    }
+    private boolean isValidEmail(String email) {
+        return email != null && email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$");
     }
 }

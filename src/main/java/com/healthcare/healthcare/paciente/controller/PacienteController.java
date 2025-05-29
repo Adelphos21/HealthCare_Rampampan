@@ -44,9 +44,6 @@ public class PacienteController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?>  eliminar(@PathVariable Long id) {
-        if (!pacienteRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
         pacienteService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
