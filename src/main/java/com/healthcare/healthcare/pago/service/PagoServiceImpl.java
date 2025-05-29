@@ -2,6 +2,7 @@ package com.healthcare.healthcare.pago.service;
 
 import com.healthcare.healthcare.cita.entity.Cita;
 import com.healthcare.healthcare.cita.repository.CitaRepository;
+import com.healthcare.healthcare.exception.NotFoundException;
 import com.healthcare.healthcare.pago.dto.PagoRequest;
 import com.healthcare.healthcare.pago.dto.PagoResponse;
 import com.healthcare.healthcare.pago.entity.Pago;
@@ -24,7 +25,7 @@ public class PagoServiceImpl implements PagoService {
     @Override
     public PagoResponse crear(PagoRequest request) {
         Cita cita = citaRepository.findById(request.getCitaId())
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Cita no encontrada"));
 
         Pago pago = Pago.builder()
                 .cita(cita)

@@ -9,6 +9,7 @@ import com.healthcare.healthcare.cita.event.CambiarCitaEmailEvent;
 import com.healthcare.healthcare.cita.event.CitaEliminadaEmailEvent;
 import com.healthcare.healthcare.cita.event.CitaRegistradaEmailEvent;
 import com.healthcare.healthcare.cita.repository.CitaRepository;
+import com.healthcare.healthcare.exception.NotFoundException;
 import com.healthcare.healthcare.medico.entity.Medico;
 import com.healthcare.healthcare.medico.repository.MedicoRepository;
 import com.healthcare.healthcare.paciente.entity.Paciente;
@@ -32,11 +33,12 @@ public class CitaService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public CitaResponse registrar(CitaRequest request) {
+
         Paciente paciente = pacienteRepository.findById(request.getPacienteId())
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Paciente no encontrado"));
 
         Medico medico = medicoRepository.findById(request.getMedicoId())
-                .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Médico no encontrado"));
 
         Cita cita = Cita.builder()
                 .asunto(request.getAsunto())
@@ -75,14 +77,14 @@ public class CitaService {
     }
 
     public void eliminar(Long id) {
-        Cita cita = citaRepository.findById(id).orElseThrow(()->new RuntimeException("Cita no encontrada"));
+        Cita cita = citaRepository.findById(id).orElseThrow(()->new NotFoundException("Cita no encontrada"));
         citaRepository.deleteById(id);
         applicationEventPublisher.publishEvent(new CitaEliminadaEmailEvent(cita));
     }
 
     public CitaResponse cambiarEstado(Long id, EstadoCita nuevoEstado) {
         Cita cita = citaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Cita no encontrada"));
 
         cita.setEstado(nuevoEstado);
         citaRepository.save(cita);
@@ -127,8 +129,7 @@ public class CitaService {
     }
     public CitaResponse cambiar(Long id, ChangeCitaRequest request) {
         Cita cita = citaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada con ID: " + id));
-
+                .orElseThrow(() -> new NotFoundException("Cita no encontrada con ID: "+id));
         cita.setFechaCita(request.getNuevaFecha());
         citaRepository.save(cita);
 

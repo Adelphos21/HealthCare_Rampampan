@@ -1,5 +1,8 @@
 package com.healthcare.healthcare.paciente.service;
 
+import com.healthcare.healthcare.exception.BadRequestException;
+import com.healthcare.healthcare.exception.ConflictException;
+import com.healthcare.healthcare.exception.NotFoundException;
 import com.healthcare.healthcare.paciente.dto.PacienteRequest;
 import com.healthcare.healthcare.paciente.dto.PacienteResponse;
 import com.healthcare.healthcare.paciente.entity.Paciente;
@@ -24,9 +27,11 @@ public class PacienteService {
     public PacienteResponse registrar(PacienteRequest request) {
 
         if (repository.existsByDni(request.getDni())) {
-            throw new IllegalArgumentException("Ya existe un usuario con ese DNI.");
+            throw new ConflictException("Ya existe un usuario con ese DNI.");
         }
-
+        if(!isValidEmail(request.getCorreo())){
+            throw new BadRequestException("Correo no valido");
+        }
         Paciente paciente = Paciente.builder()
                 .nombre(request.getNombre())
                 .apellido(request.getApellido())
@@ -64,8 +69,11 @@ public class PacienteService {
     }
 
     public void eliminar(Long id) {
-        Paciente paciente = repository.findById(id).orElseThrow();
+        Paciente paciente = repository.findById(id).orElseThrow(() ->new NotFoundException("No existe un paciente con el id dado"));
         repository.deleteById(id);
         applicationEventPublisher.publishEvent(new EliminarPacienteEmailEvent(paciente));
+    }
+    private boolean isValidEmail(String email) {
+        return email != null && email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$");
     }
 }
