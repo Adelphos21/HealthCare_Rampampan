@@ -32,9 +32,6 @@ public class MedicoService {
     public MedicoResponse registrar(MedicoRequest request) {
         /*Especialidad especialidad = especialidadRepository.findById(request.getEspecialidadId())
                 .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));*/
-        if(!(medicoRepository.existsByDni(request.getDni()))){
-            throw new ConflictException("Ya existe un medico con ese DNI");
-        }
         if(!isValidEmail(request.getCorreo())){
             throw new BadRequestException("Correo no valido");
         }

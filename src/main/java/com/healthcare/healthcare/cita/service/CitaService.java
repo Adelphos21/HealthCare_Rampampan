@@ -145,4 +145,8 @@ public class CitaService {
                 .estado(cita.getEstado())
                 .build();
     }
+
+    public boolean existePorId(Long id) {
+        return citaRepository.existsById(id);
+    }
 }
