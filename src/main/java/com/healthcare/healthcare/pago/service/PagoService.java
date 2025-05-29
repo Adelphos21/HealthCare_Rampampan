@@ -8,4 +8,7 @@ import java.util.List;
 public interface PagoService {
     PagoResponse crear(PagoRequest request);
     List<PagoResponse> listarPorCita(Long citaId);
+    PagoResponse actualizar(Long id, PagoRequest request);
+    void eliminar(Long id);
+    boolean existePago(Long id);
 }
