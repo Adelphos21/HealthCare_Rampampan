@@ -33,7 +33,7 @@ public class PacienteService {
             throw new BadRequestException("Correo no valido");
         }
         if (repository.existsByCorreo(request.getCorreo())) {
-            throw new IllegalArgumentException("Ya existe un usuario con ese correo.");
+            throw new ConflictException("Ya existe un usuario con ese correo.");
         }
       
         Paciente paciente = Paciente.builder()

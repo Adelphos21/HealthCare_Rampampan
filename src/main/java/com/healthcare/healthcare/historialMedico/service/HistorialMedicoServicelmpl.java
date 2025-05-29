@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.historialMedico.service;
 
+import com.healthcare.healthcare.exception.NotFoundException;
 import com.healthcare.healthcare.historialMedico.dto.HistorialMedicoRequest;
 import com.healthcare.healthcare.historialMedico.dto.HistorialMedicoResponse;
 
@@ -25,7 +26,7 @@ public class HistorialMedicoServicelmpl implements HistorialMedicoService {
     @Override
     public HistorialMedicoResponse crear(HistorialMedicoRequest request) {
         Paciente paciente = pacienteRepo.findById(request.getPacienteId())
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Paciente no encontrado"));
 
         HistorialMedico historial = HistorialMedico.builder()
                 .paciente(paciente)
