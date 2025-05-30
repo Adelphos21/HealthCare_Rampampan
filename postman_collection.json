@@ -1,0 +1,1368 @@
+{
+	"info": {
+		"_postman_id": "e8ef47fd-a14c-486a-96a9-b30deeafde4e",
+		"name": "Healthcare API",
+		"description": "**Pacientes:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/pacientes | Público | Registra un nuevo paciente. |\n| GET | /api/pacientes | ADMIN, MEDICO | Lista todos los pacientes registrados. |\n| DELETE | /api/pacientes/{id} | ADMIN | Elimina un paciente por ID. |\n| GET | /api/pacientes/{id}/citas | ADMIN, MEDICO | Lista el historial de citas de un paciente por su ID. |\n| GET | /api/pacientes/mis-citas | PACIENTE | Lista las citas del paciente autenticado. |\n| DELETE | /api/pacientes/ | PACIENTE | Elimina al paciente autenticado. |\n\n**Medicos:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/medicos | ADMIN | Registra un nuevo médico. |\n| GET | /api/medicos | ADMIN | Lista todos los médicos registrados. |\n| GET | /api/medicos/especialidad/{especialidad} | ADMIN | Lista médicos por especialidad (sin tildes y en mayúscula). |\n| DELETE | /api/medicos/{id} | ADMIN | Elimina un médico por ID. |\n\n**Enfermeros:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/enfermeros | ADMIN | Registra un nuevo enfermero. |\n| GET | /api/enfermeros | ADMIN, MEDICO | Lista todos los enfermeros registrados. |\n| DELETE | /api/enfermeros/{id} | ADMIN | Elimina un enfermero por ID. |\n| PATCH | /api/enfermeros/{enfermeroId}/asignar-medico/{medicoId} | ADMIN | Asigna un médico a un enfermero. |\n| GET | /api/enfermeros/por-medico/{medicoId} | ADMIN, MEDICO | Lista todos los enfermeros asignados a un médico por su ID. |\n\n**Cita:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/citas | ADMIN, PACIENTE | Registra una nueva cita. |\n| GET | /api/citas | ADMIN | Lista todas las citas registradas. |\n| DELETE | /api/citas/{id} | ADMIN | Elimina una cita por su ID. |\n| PUT | /api/citas/{id}/estado | ADMIN | Cambia el estado de una cita (ej. PROGRAMADA, CANCELADA). |\n| GET | /api/citas/estado?estado=PROGRAMADA | Público | Lista citas filtradas por estado. |\n| PATCH | /api/citas/{id}/cambiar-fecha | ADMIN, PACIENTE | Cambia la fecha de una cita específica. |\n\n**Historial Médico:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/historiales | ADMIN, MEDICO | Crea un nuevo historial médico para un paciente existente. |\n| GET | /api/historiales/paciente/{id} | ADMIN, MEDICO | Lista todos los historiales médicos asociados a un paciente. |\n\n**Pago:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/pagos | ADMIN, PACIENTE | Registra un nuevo pago asociado a una cita. |\n| GET | /api/pagos/cita/{id} | ADMIN, PACIENTE | Lista los pagos realizados para una cita dada. |",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37456841"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login Admin",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Removed response.json() as the response is not JSON\r",
+											"pm.collectionVariables.set(\"token\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin123\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "**Antes de probar los endpoint:**\n\n1. Logearse con las credenciales correspondientes:\n    \n\n**Admin por defecto para pruebas:**\n\n- username: \"admin\"\n    \n- password: \"admin123\""
+		},
+		{
+			"name": "Paciente",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Registrar Paciente",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nombre\": \"John\",\r\n  \"apellido\": \"Titor\",\r\n  \"dni\": \"74325559\",\r\n  \"telefono\": \"912986486\",\r\n  \"correo\": \"sg-epk@jtk93.x29.jp\",\r\n  \"password\": \"sgepk\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/pacientes",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"pacientes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Paciente",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Removed response.json() as the response is not JSON\r",
+											"pm.collectionVariables.set(\"token\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"sg-epk@jtk93.x29.jp\",\r\n  \"password\": \"sgepk\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Citas de Paciente",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pacientes/mis-citas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pacientes",
+								"mis-citas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Paciente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/pacientes/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pacientes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Paciente por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Anel\",\r\n  \"apellido\": \"Rojas\",\r\n  \"dni\": \"74645568\",\r\n  \"telefono\": \"912986586\",\r\n  \"correo\": \"anel.rojas@gmail.com\",\r\n  \"password\": \"pass123word\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pacientes/{{id_paciente}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pacientes",
+								"{{id_paciente}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Pacientes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pacientes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pacientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Citas por id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pacientes/{{id_paciente}}/citas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pacientes",
+								"{{id_paciente}}",
+								"citas"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "**Antes de probar los endpoint:**\n\n1. Registrar un paciente\n    \n2. Logearse con las credenciales correspondientes(email y password)\n    \n\n**Endpoints:**\n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/pacientes | Público (sin autenticación) | Registra un nuevo paciente. |\n| GET | /api/pacientes | ADMIN, MEDICO | Lista todos los pacientes registrados. |\n| DELETE | /api/pacientes/{id} | ADMIN | Elimina un paciente por ID. |\n| GET | /api/pacientes/{id}/citas | ADMIN, MEDICO | Obtiene el historial de citas de un paciente específico por su ID. |\n| GET | /api/pacientes/mis-citas | PACIENTE | Devuelve las citas del paciente autenticado actualmente. |\n| DELETE | /api/pacientes/ | PACIENTE | Elimina la cuenta del paciente autenticado actualmente. |"
+		},
+		{
+			"name": "Medico",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Registrar Medico",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nombre\": \"Flavio\",\r\n  \"apellido\": \"Yllesca\",\r\n  \"dni\": \"75199832\",\r\n  \"telefono\": \"943598586\",\r\n  \"correo\": \"iflav@gmail.com\",\r\n  \"especialidad\": \"NEUROLOGIA\",\r\n  \"password\": \"pass123word\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/medicos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"medicos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Medico",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Removed response.json() as the response is not JSON\r",
+											"pm.collectionVariables.set(\"token\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"iflav@gmail.com\",\r\n  \"password\": \"pass123word\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar Medicos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/medicos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"medicos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Medicos por especialidad",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/medicos/especialidad/{{especialidad}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"medicos",
+								"especialidad",
+								"{{especialidad}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Medico por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/medicos/{{medicoId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"medicos",
+								"{{medicoId}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "**Antes de probar los endpoint:**\n\n1. Registrar un paciente\n    \n2. Logearse con las credenciales correspondientes(email y password)\n    \n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/medicos | ADMIN | Registra un nuevo médico en el sistema. |\n| GET | /api/medicos | ADMIN | Lista todos los médicos registrados. |\n| GET | /api/medicos/especialidad/{especialidad} | ADMIN | Lista médicos filtrados por especialidad. Elimina tildes y convierte a mayúsculas. |\n| DELETE | /api/medicos/{id} | ADMIN | Elimina un médico por su ID. |"
+		},
+		{
+			"name": "Enfermero",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Registrar Enfermero",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nombre\": \"Flavio\",\r\n  \"apellido\": \"Yllesca\",\r\n  \"dni\": \"75199848\",\r\n  \"telefono\": \"943598586\",\r\n  \"correo\": \"iflav@gmail.com\",\r\n  \"password\": \"pass123word\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/enfermeros",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"enfermeros"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Enfermero",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Removed response.json() as the response is not JSON\r",
+											"pm.collectionVariables.set(\"token\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"iflav@gmail.com\",\r\n  \"password\": \"pass123word\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar Enfermeros",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/enfermeros",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"enfermeros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Enfermeros por Medico a cargo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/enfermeros/por-medico/{{medicoId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"enfermeros",
+								"por-medico",
+								"{{medicoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Enfermero por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/enfermeros/{{enfermeroId}}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"enfermeros",
+								"{{enfermeroId}}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Asignar Medico",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Flavio\",\r\n  \"apellido\": \"Yllesca\",\r\n  \"dni\": \"75199832\",\r\n  \"telefono\": \"943598586\",\r\n  \"correo\": \"iflav@gmail.com\",\r\n  \"especialidad\": \"NEUROLOGIA\",\r\n  \"password\": \"pass123word\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/enfermeros/{{enfermeroId}}/asignar-medico/{{medicoId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"enfermeros",
+								"{{enfermeroId}}",
+								"asignar-medico",
+								"{{medicoId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "**Antes de probar los endpoint:**\n\n1. Registrar un enfermero\n    \n2. Logearse con las credenciales correspondientes(email y password)\n    \n\n| Método HTTP | URI | Roles autorizados | Descripción |\n| --- | --- | --- | --- |\n| POST | /api/enfermeros | ADMIN | Registra un nuevo enfermero. |\n| GET | /api/enfermeros | ADMIN, MEDICO | Lista todos los enfermeros registrados. |\n| DELETE | /api/enfermeros/{id} | ADMIN | Elimina un enfermero por ID. |\n| PATCH | /api/enfermeros/{enfermeroId}/asignar-medico/{medicoId} | ADMIN | Asigna un médico a un enfermero. |\n| GET | /api/enfermeros/por-medico/{medicoId} | ADMIN, MEDICO | Lista todos los enfermeros asignados a un médico por su ID. |"
+		},
+		{
+			"name": "Cita",
+			"item": [
+				{
+					"name": "Registrar Cita",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pacienteId\": 1,\n  \"medicoId\": 2,\n  \"fechaHora\": \"2025-06-01T10:30:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/citas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"citas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todas las Citas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/citas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"citas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Cita por ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/citas/{{citaId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"citas",
+								"{{citaId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar Estado de Cita",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nuevoEstado\": \"CANCELADA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/citas/{{citaId}}/estado",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"citas",
+								"{{citaId}}",
+								"estado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Citas por Estado",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/citas/estado?estado=PROGRAMADA",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"citas",
+								"estado"
+							],
+							"query": [
+								{
+									"key": "estado",
+									"value": "PROGRAMADA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar Fecha de Cita",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nuevaFechaHora\": \"2025-06-10T15:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/citas/{{citaId}}/cambiar-fecha",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"citas",
+								"{{citaId}}",
+								"cambiar-fecha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Historial Médico",
+			"item": [
+				{
+					"name": "Crear Historial Médico",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pacienteId\": 1,\n  \"diagnostico\": \"Hipertensi\\u00f3n\",\n  \"tratamiento\": \"Dieta baja en sal y medicaci\\u00f3n\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/historiales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"historiales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Historiales por Paciente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/historiales/paciente/{{pacienteId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"historiales",
+								"paciente",
+								"{{pacienteId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pago",
+			"item": [
+				{
+					"name": "Crear Pago",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"citaId\": 1,\n  \"monto\": 50.0,\n  \"metodoPago\": \"TARJETA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pagos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pagos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Pagos por Cita",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/pagos/cita/{{citaId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pagos",
+								"cita",
+								"{{citaId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pacienteId",
+			"value": "3",
+			"type": "default"
+		},
+		{
+			"key": "medicoId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "enfermeroId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "especialidad",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "citaId",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
