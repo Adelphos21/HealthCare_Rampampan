@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    networks:
+      - spring-net
+
+  app:
+    build: .
+    container_name: spring_app
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      MAIL_SMPT_USERNAME: ${MAIL_SMPT_USERNAME}
+      MAIL_SMPT_PASSWORD: ${MAIL_SMPT_PASSWORD}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./.env:/app/.env
+    networks:
+      - spring-net
+
+networks:
+  spring-net:
