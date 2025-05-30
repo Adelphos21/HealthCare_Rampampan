@@ -128,11 +128,14 @@ La entidad Mail representa los correos electrónicos enviados desde el sistema p
 - **AuthenticationError:** [Descripción y casos de uso]
 - **DatabaseError:** [Descripción y casos de uso]
 
-**Justificación:** El manejo adecuado de errores es crucial para [explicar por qué es importante en el contexto del proyecto].
-
+**Justificación:**
+El manejo adecuado de errores es crucial para garantizar una experiencia de usuario fluida, evitar caídas inesperadas del sistema y proporcionar mensajes claros en caso de fallos, usamos las mejores prácticas creando nuestros propios error handling y usando un global exception handler.
 ---
 
-## Medidas de Seguridad Implementadas???????
+## Medidas de Seguridad Implementadas
+**Justificación:**
+Creacion de jwt
+---
 
 ### Seguridad de Datos
 - **Autenticación y Autorización:** Uso de JWT para proteger rutas y validar identidad de usuarios.
@@ -172,56 +175,28 @@ Todo esto es crucial para no afectar la experiencia del usuario y mantener la es
 
 ---
 
-## GitHub???????/
+## GitHub
 
-### GitHub Projects??????
+### GitHub Projects
 
 #### Organización del Proyecto
 **Metodología:** [Ej: Kanban, Scrum]  
 **Boards Utilizados:** [Descripción de los tableros creados]
 
 #### Gestión de Issues
-- **Total de Issues:** [Número]
-- **Issues Cerrados:** [Número]
-- **Categorías:** [Ej: Bug, Feature, Enhancement]
+- **Total de Issues:** 25
+- **Issues Cerrados:** 20
+- **Categorías:** Feature, Fix, Create
 
 #### Deadlines y Milestones
-- **Milestone 1:** [Fecha] - [Descripción]
-- **Milestone 2:** [Fecha] - [Descripción]
-- **Milestone 3:** [Fecha] - [Descripción]
+- **Milestone 1:** 08/05/2025 - Inicio del proyecto, definición de requerimientos, conformación de equipos y diseño inicial del modelo de base de datos.
+- **Milestone 2:** 23/05/2025 - Implementación de funcionalidades principales: gestión de pacientes, citas, usuarios
+- **Milestone 3:** 25/05/2025 - Integración de seguridad con JWT, manejo de errores global, despliegue en contenedor Docker y presentación final.
+- **Milestone 4:** 27/05/2025 - Envío de notificaciones por correo.
 
-### GitHub Actions?????????
+### GitHub Actions
 
-#### Flujo de CI/CD Implementado
 
-```yaml
-# Ejemplo del workflow implementado
-name: CI/CD Pipeline
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: Install dependencies
-        run: npm install
-      - name: Run tests
-        run: npm test
-```
-
-#### Beneficios del Flujo Implementado?????
-- **Integración Continua:** [Descripción de beneficios]
-- **Deployment Automático:** [Descripción de beneficios]
-- **Control de Calidad:** [Descripción de beneficios]
 
 ---
 
@@ -239,7 +214,7 @@ jobs:
 - Manejo de eventos y asincronía en aplicaciones Java.
 - Pruebas automatizadas y flujos CI/CD con GitHub Actions.(?)
 
-### Trabajo Futuro(?)
+### Trabajo Futuro
 
 - Ampliar módulos de reporte y análisis de datos clínicos.
 - Mejorar interfaz de usuario con front-end dedicado.
