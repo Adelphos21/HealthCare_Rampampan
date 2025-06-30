@@ -12,7 +12,9 @@ public class MedicoRequest {
     private String nombre;
 
     @NotBlank(message = "El apellido es obligatorio")
-    private String apellido;
+    private String apellido_p;
+    @NotBlank(message = "El apellido es obligatorio")
+    private String apellido_m;
 
     @NotBlank(message = "El DNI es obligatorio")
     @Size(min = 8, max = 8, message = "El DNI debe tener exactamente 8 caracteres")

@@ -9,6 +9,7 @@ import lombok.Getter;
 public class MedicoResponse {
     private Long id;
     private String nombre;
-    private String apellido;
+    private String apellido_p;
+    private String apellido_m;
     private Especialidad especialidad;
 }

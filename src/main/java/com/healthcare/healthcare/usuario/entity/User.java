@@ -29,7 +29,8 @@ public class User implements UserDetails {
     private String username;
 
     private String nombre;
-    private String apellido;
+    private String apellido_p;
+    private String apellido_m;
     @Column(unique = true)
     private String dni;
 

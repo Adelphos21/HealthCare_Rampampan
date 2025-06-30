@@ -47,7 +47,8 @@ public class MedicoService {
 
         Medico medico = Medico.builder()
                 .nombre(request.getNombre())
-                .apellido(request.getApellido())
+                .apellido_p(request.getApellido_p())
+                .apellido_m(request.getApellido_m())
                 .dni(request.getDni())
                 .telefono(request.getTelefono())
                 .correo(request.getCorreo())
@@ -64,7 +65,8 @@ public class MedicoService {
         return MedicoResponse.builder()
                 .id(medico.getId())
                 .nombre(medico.getNombre())
-                .apellido(medico.getApellido())
+                .apellido_p(medico.getApellido_p())
+                .apellido_m(medico.getApellido_m())
                 .especialidad(medico.getEspecialidad())
                 .build();
     }
@@ -74,7 +76,8 @@ public class MedicoService {
                 .map(m -> MedicoResponse.builder()
                         .id(m.getId())
                         .nombre(m.getNombre())
-                        .apellido(m.getApellido())
+                        .apellido_p(m.getApellido_p())
+                        .apellido_m(m.getApellido_m())
                         .especialidad(m.getEspecialidad())
                         .build()
                 ).collect(Collectors.toList());
@@ -85,7 +88,8 @@ public class MedicoService {
                 .map(m -> MedicoResponse.builder()
                         .id(m.getId())
                         .nombre(m.getNombre())
-                        .apellido(m.getApellido())
+                        .apellido_p(m.getApellido_p())
+                        .apellido_m(m.getApellido_m())
                         .especialidad(m.getEspecialidad())
                         .build()
                 ).collect(Collectors.toList());
