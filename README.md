@@ -2,11 +2,12 @@
  
 **Curso:** CS 2031 Desarrollo Basado en Plataforma  
 **Integrantes:**
-- Juan Renato Flores Pascual
 - Carlos Enrique Angel Oriundo
-- Ana Lucia Huapaya Yep
 - Matias Sebatias Sanchez Dominguez
+- Ana Lucia Huapaya Yep
 - Fabiana Antonella Ameri Ingaruca
+- Juan Renato Flores Pascual
+
 
 ---
 

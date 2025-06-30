@@ -32,6 +32,8 @@ public class Cita {
     @Enumerated(EnumType.STRING)
     private EstadoCita estado;
 
+    @Enumerated(EnumType.STRING)
+    private ModalidadCita modalidad;
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;

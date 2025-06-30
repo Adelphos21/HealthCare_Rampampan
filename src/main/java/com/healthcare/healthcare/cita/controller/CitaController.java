@@ -37,7 +37,7 @@ public class CitaController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PACIENTE')")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         if (!citaService.existePorId(id)) {
             return ResponseEntity.notFound().build(); // 404 si no existe
@@ -47,7 +47,7 @@ public class CitaController {
     }
 
     @PutMapping("/{id}/estado")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PACIENTE')")
     public ResponseEntity<CitaResponse> cambiarEstado(
             @PathVariable Long id,
             @RequestBody @Valid CambioEstadoRequest request
@@ -81,4 +81,5 @@ public class CitaController {
         CitaResponse response = citaService.cambiar(id, request);
         return ResponseEntity.ok(response); // 200
     }
+
 }
