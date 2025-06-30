@@ -23,7 +23,7 @@ public class AuthController {
     public String login(@RequestBody LoginRequest request) {
         try {
             Authentication auth = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(request.getDni(), request.getPassword())
             );
 
             User user = (User) auth.getPrincipal();
