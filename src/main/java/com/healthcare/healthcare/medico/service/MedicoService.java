@@ -50,6 +50,8 @@ public class MedicoService {
                 .apellido_p(request.getApellido_p())
                 .apellido_m(request.getApellido_m())
                 .dni(request.getDni())
+                .sexo(request.getSexo())
+                .fecha_nacimiento(request.getFecha_nacimiento())
                 .telefono(request.getTelefono())
                 .correo(request.getCorreo())
                 .especialidad(request.getEspecialidad())
@@ -67,6 +69,8 @@ public class MedicoService {
                 .nombre(medico.getNombre())
                 .apellido_p(medico.getApellido_p())
                 .apellido_m(medico.getApellido_m())
+                .sexo(medico.getSexo())
+                .fecha_nacimiento(medico.getFecha_nacimiento())
                 .especialidad(medico.getEspecialidad())
                 .build();
     }
@@ -78,6 +82,8 @@ public class MedicoService {
                         .nombre(m.getNombre())
                         .apellido_p(m.getApellido_p())
                         .apellido_m(m.getApellido_m())
+                        .sexo(m.getSexo())
+                        .fecha_nacimiento(m.getFecha_nacimiento())
                         .especialidad(m.getEspecialidad())
                         .build()
                 ).collect(Collectors.toList());
@@ -90,6 +96,8 @@ public class MedicoService {
                         .nombre(m.getNombre())
                         .apellido_p(m.getApellido_p())
                         .apellido_m(m.getApellido_m())
+                        .sexo(m.getSexo())
+                        .fecha_nacimiento(m.getFecha_nacimiento())
                         .especialidad(m.getEspecialidad())
                         .build()
                 ).collect(Collectors.toList());

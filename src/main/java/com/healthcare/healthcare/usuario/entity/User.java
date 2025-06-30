@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -33,7 +34,9 @@ public class User implements UserDetails {
     private String apellido_m;
     @Column(unique = true)
     private String dni;
-
+    private LocalDate fecha_nacimiento;
+    @Enumerated(EnumType.STRING)
+    private Sexo sexo;
     private String password;
 
     @Enumerated(EnumType.STRING)
