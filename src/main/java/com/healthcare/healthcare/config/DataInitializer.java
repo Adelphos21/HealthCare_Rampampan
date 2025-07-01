@@ -17,6 +17,7 @@ public class DataInitializer {
             if (userRepository.findByUsername("admin").isEmpty()) {
                 userRepository.save(User.builder()
                         .username("admin")
+                        .dni("admin")
                         .password(encoder.encode("admin123"))
                         .role(Role.ADMIN)
                         .enabled(true)

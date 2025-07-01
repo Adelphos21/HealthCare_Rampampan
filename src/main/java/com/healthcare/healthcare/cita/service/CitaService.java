@@ -5,6 +5,7 @@ import com.healthcare.healthcare.cita.dto.CitaRequest;
 import com.healthcare.healthcare.cita.dto.CitaResponse;
 import com.healthcare.healthcare.cita.entity.Cita;
 import com.healthcare.healthcare.cita.entity.EstadoCita;
+import com.healthcare.healthcare.cita.entity.ModalidadCita;
 import com.healthcare.healthcare.cita.event.CambiarCitaEmailEvent;
 import com.healthcare.healthcare.cita.event.CitaEliminadaEmailEvent;
 import com.healthcare.healthcare.cita.event.CitaRegistradaEmailEvent;
@@ -45,6 +46,7 @@ public class CitaService {
                 .fechaCita(request.getFechaCita())
                 .fechaReserva(LocalDate.now())
                 .estado(EstadoCita.PENDIENTE)
+                .modalidad(request.getModalidad())
                 .paciente(paciente)
                 .medico(medico)
                 .build();
@@ -56,6 +58,7 @@ public class CitaService {
                 .asunto(cita.getAsunto())
                 .nombrePaciente(paciente.getNombre())
                 .nombreMedico(medico.getNombre())
+                .modalidad(cita.getModalidad())
                 .fechaReserva(cita.getFechaReserva())
                 .fechaCita(cita.getFechaCita())
                 .estado(cita.getEstado())

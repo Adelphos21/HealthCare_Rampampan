@@ -24,7 +24,6 @@ public class CitaRequest {
     private String asunto;
 
     @NotNull(message = "La modalidad de la cita es obligatoria")
-    @NotBlank(message = "Modalidad : Presencial | Virtual")
     private ModalidadCita modalidad;
     @NotNull(message = "La fecha de la cita es obligatoria")
     @Future(message = "La fecha de la cita debe ser futura")
