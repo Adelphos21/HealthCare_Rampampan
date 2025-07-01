@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-
+        System.out.println(">> JwtAuthenticationFilter ejecutado para: " + request.getRequestURI());
         String path = request.getServletPath();
 
 //        // Ignorar rutas públicas
@@ -50,7 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(username);
-
+            System.out.println(">> Usuario encontrado por DNI: " + userDetails.getUsername());
+            System.out.println(">> Token válido? " + jwtService.isTokenValid(jwt, userDetails));
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 var authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

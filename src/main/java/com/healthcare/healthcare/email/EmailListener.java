@@ -39,7 +39,7 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", paciente.getNombre());
-        context.setVariable("apellido", paciente.getApellido());
+        context.setVariable("apellidos", paciente.getApellido_p() + " " + paciente.getApellido_m());
         context.setVariable("dni", paciente.getDni());
         context.setVariable("telefono", paciente.getTelefono());
         context.setVariable("correo", paciente.getCorreo());
@@ -92,7 +92,7 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", enfermero.getNombre());
-        context.setVariable("apellido", enfermero.getApellido());
+        context.setVariable("apellido", enfermero.getApellido_p() + " " + enfermero.getApellido_m());
         context.setVariable("dni", enfermero.getDni());
         context.setVariable("telefono", enfermero.getTelefono());
         context.setVariable("correo", enfermero.getCorreo());
@@ -129,7 +129,7 @@ public class EmailListener {
         Medico medico = event.getMedico();
         Context context = new Context();
         context.setVariable("nombre", medico.getNombre());
-        context.setVariable("apellido", medico.getApellido());
+        context.setVariable("apellido", medico.getApellido_p()+" "+medico.getApellido_m());
         context.setVariable("dni", medico.getDni());
         context.setVariable("correo", medico.getCorreo());
         context.setVariable("telefono", medico.getTelefono());
@@ -150,7 +150,7 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", medico.getNombre());
-        context.setVariable("apellido", medico.getApellido());
+        context.setVariable("apellido", medico.getApellido_p() + " "+medico.getApellido_m());
         context.setVariable("dni", medico.getDni());
         context.setVariable("correo", medico.getCorreo());
 
@@ -169,10 +169,10 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", cita.getPaciente().getNombre());
-        context.setVariable("apellido", cita.getPaciente().getApellido());
+        context.setVariable("apellido", cita.getPaciente().getApellido_p() +" "+cita.getPaciente().getApellido_m());
         context.setVariable("fecha", cita.getFechaCita());
         context.setVariable("medico_nombre", cita.getMedico().getNombre());
-        context.setVariable("medico_apellido", cita.getMedico().getApellido());
+        context.setVariable("medico_apellido", cita.getMedico().getApellido_p()+" " + cita.getPaciente().getApellido_m());
         emailService.sendHtmlMessage(event.getCita().getPaciente().getCorreo(),
                 "Registro de cita exitoso", "crear-cita", context);
     }
@@ -184,10 +184,10 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", cita.getPaciente().getNombre());
-        context.setVariable("apellido", cita.getPaciente().getApellido());
+        context.setVariable("apellido", cita.getPaciente().getApellido_p() + " " + cita.getPaciente().getApellido_m());
         context.setVariable("fecha", cita.getFechaCita());
         context.setVariable("medico_nombre", cita.getMedico().getNombre());
-        context.setVariable("medico_apellido", cita.getMedico().getApellido());
+        context.setVariable("medico_apellido", cita.getMedico().getApellido_p()+" " + cita.getPaciente().getApellido_m());
 
         emailService.sendHtmlMessage(
                 cita.getPaciente().getCorreo(),
@@ -204,10 +204,10 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", cita.getPaciente().getNombre());
-        context.setVariable("apellido", cita.getPaciente().getApellido());
+        context.setVariable("apellido", cita.getPaciente().getApellido_p() +" "+cita.getPaciente().getApellido_m());
         context.setVariable("fecha", cita.getFechaCita());
         context.setVariable("medico_nombre", cita.getMedico().getNombre());
-        context.setVariable("medico_apellido", cita.getMedico().getApellido());
+        context.setVariable("medico_apellido", cita.getMedico().getApellido_p()+" " + cita.getPaciente().getApellido_m());
 
         emailService.sendHtmlMessage(
                 cita.getPaciente().getCorreo(),
@@ -225,7 +225,7 @@ public class EmailListener {
 
         Context context = new Context();
         context.setVariable("nombre", cita.getPaciente().getNombre());
-        context.setVariable("apellido", cita.getPaciente().getApellido());
+        context.setVariable("apellido", cita.getPaciente().getApellido_p() +" "+cita.getPaciente().getApellido_m());
         context.setVariable("fechaCita", cita.getFechaCita());
         context.setVariable("monto", pago.getMonto());
         context.setVariable("metodoPago", pago.getMetodoPago().toString());

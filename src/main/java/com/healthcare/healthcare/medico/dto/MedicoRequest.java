@@ -23,10 +23,11 @@ public class MedicoRequest {
     @Size(min = 8, max = 8, message = "El DNI debe tener exactamente 8 caracteres")
     private String dni;
 
-    @NotBlank(message = "La fecha de nacimiento es obligaotoria")
+    @NotNull(message = "La fecha de la cita es obligatoria")
+    @Past(message = "La fecha de la cita debe ser futura")
     private LocalDate fecha_nacimiento;
 
-    @NotBlank
+    @NotNull
     private Sexo sexo;
 
     @NotBlank(message = "El teléfono es obligatorio")
