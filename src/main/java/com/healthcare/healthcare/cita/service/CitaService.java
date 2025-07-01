@@ -5,7 +5,6 @@ import com.healthcare.healthcare.cita.dto.CitaRequest;
 import com.healthcare.healthcare.cita.dto.CitaResponse;
 import com.healthcare.healthcare.cita.entity.Cita;
 import com.healthcare.healthcare.cita.entity.EstadoCita;
-import com.healthcare.healthcare.cita.entity.ModalidadCita;
 import com.healthcare.healthcare.cita.event.CambiarCitaEmailEvent;
 import com.healthcare.healthcare.cita.event.CitaEliminadaEmailEvent;
 import com.healthcare.healthcare.cita.event.CitaRegistradaEmailEvent;
@@ -18,6 +17,8 @@ import com.healthcare.healthcare.paciente.entity.Paciente;
 import com.healthcare.healthcare.paciente.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -117,7 +118,7 @@ public class CitaService {
         ).collect(Collectors.toList());
     }
 
-    public List<CitaResponse> listarPorPaciente(Long pacienteId) {
+    public List<CitaResponse> listarPorPacienteSinPaginar(Long pacienteId) {
         return citaRepository.findByPacienteId(pacienteId).stream().map(c ->
                 CitaResponse.builder()
                         .id(c.getId())
@@ -130,6 +131,21 @@ public class CitaService {
                         .build()
         ).collect(Collectors.toList());
     }
+
+    public Page<CitaResponse> listarPorPaciente(Long pacienteId, Pageable pageable) {
+        return citaRepository.findByPacienteId(pacienteId, pageable)
+                .map(c -> CitaResponse.builder()
+                        .id(c.getId())
+                        .asunto(c.getAsunto())
+                        .nombrePaciente(c.getPaciente().getNombre())
+                        .nombreMedico(c.getMedico().getNombre())
+                        .fechaCita(c.getFechaCita())
+                        .fechaReserva(c.getFechaReserva())
+                        .estado(c.getEstado())
+                        .modalidad(c.getModalidad())
+                        .build());
+    }
+
     public CitaResponse cambiar(Long id, ChangeCitaRequest request) {
         Cita cita = citaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Cita no encontrada con ID: "+id));

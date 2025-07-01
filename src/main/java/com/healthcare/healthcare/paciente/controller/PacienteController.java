@@ -11,6 +11,11 @@ import com.healthcare.healthcare.usuario.entity.User;
 import com.healthcare.healthcare.usuario.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,18 +55,24 @@ public class PacienteController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEDICO')")
     @GetMapping("/{id}/citas")
-    public List<CitaResponse> historialCitas(@PathVariable Long id) {
-        return citaService.listarPorPaciente(id);
+    public Page<CitaResponse> historialCitas(
+            @PathVariable Long id,
+            @PageableDefault(size = 10, sort = "fechaCita", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return citaService.listarPorPaciente(id, pageable);
     }
 
     //Endpoints para PACIENTE
     @PreAuthorize("hasRole('PACIENTE')")
     @GetMapping("/mis-citas")
-    public List<CitaResponse> citasDelPacienteAutenticado() {
+    public Page<CitaResponse> citasDelPacienteAutenticado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        Paciente paciente = pacienteRepository.findByUsername(username).orElseThrow();
-        return citaService.listarPorPaciente(paciente.getId());
+        Paciente paciente = pacienteRepository.findByDni(username).orElseThrow();
+        return citaService.listarPorPaciente(paciente.getId(), PageRequest.of(page, size));
     }
 
     @PreAuthorize("hasRole('PACIENTE')")

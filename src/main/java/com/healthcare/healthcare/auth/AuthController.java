@@ -6,6 +6,8 @@ import com.healthcare.healthcare.paciente.entity.Paciente;
 import com.healthcare.healthcare.paciente.repository.PacienteRepository;
 import com.healthcare.healthcare.usuario.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,17 +25,18 @@ public class AuthController {
     private final PacienteRepository pacienteRepository;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getDni(), request.getPassword())
             );
 
             User user = (User) auth.getPrincipal();
-            return jwtService.generateToken(user);
-
+            return ResponseEntity.ok(jwtService.generateToken(user));
         } catch (AuthenticationException e) {
-            return "Credenciales inválidas";
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Credenciales inválidas");
         }
     }
     @GetMapping("/me")

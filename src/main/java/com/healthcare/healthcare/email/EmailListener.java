@@ -71,7 +71,7 @@ public class EmailListener {
     @Async
     public void handleHistorialCitasEvent(HistorialCitasEmailEvent event) {
         Paciente paciente = event.getPaciente();
-        List<CitaResponse> citas = citaService.listarPorPaciente(paciente.getId());
+        List<CitaResponse> citas = citaService.listarPorPacienteSinPaginar(paciente.getId());
 
         Context context = new Context();
         context.setVariable("nombre", paciente.getNombre());
