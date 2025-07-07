@@ -17,6 +17,8 @@ public class HealthcareApplication {
 		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
 		System.setProperty("MAIL_SMPT_USERNAME", dotenv.get("MAIL_SMPT_USERNAME"));
 		System.setProperty("MAIL_SMPT_PASSWORD", dotenv.get("MAIL_SMPT_PASSWORD"));
+		System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
+		System.setProperty("JWT_EXPIRATION", dotenv.get("JWT_EXPIRATION"));
 		SpringApplication.run(HealthcareApplication.class, args);
 	}
 
