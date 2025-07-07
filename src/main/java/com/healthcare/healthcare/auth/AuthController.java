@@ -124,7 +124,7 @@ public class AuthController {
         return null;
     }
     @GetMapping("/user/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PACIENTE')")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         Object dto = userService.findById(id);
         return ResponseEntity.ok(dto);

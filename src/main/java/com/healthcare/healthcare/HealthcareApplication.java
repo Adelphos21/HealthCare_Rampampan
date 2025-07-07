@@ -21,5 +21,4 @@ public class HealthcareApplication {
 		System.setProperty("JWT_EXPIRATION", dotenv.get("JWT_EXPIRATION"));
 		SpringApplication.run(HealthcareApplication.class, args);
 	}
-
 }
