@@ -48,6 +48,7 @@ public class CitaService {
                 .fechaReserva(LocalDate.now())
                 .estado(EstadoCita.PENDIENTE)
                 .modalidad(request.getModalidad())
+                .especialidad(request.getEspecialidad())
                 .paciente(paciente)
                 .medico(medico)
                 .build();
@@ -60,6 +61,7 @@ public class CitaService {
                 .nombrePaciente(paciente.getNombre())
                 .nombreMedico(medico.getNombre())
                 .modalidad(cita.getModalidad())
+                .especialidad(cita.getEspecialidad())
                 .fechaReserva(cita.getFechaReserva())
                 .fechaCita(cita.getFechaCita())
                 .estado(cita.getEstado())
@@ -76,6 +78,8 @@ public class CitaService {
                         .fechaCita(c.getFechaCita())
                         .fechaReserva(c.getFechaReserva())
                         .estado(c.getEstado())
+                        .modalidad(c.getModalidad())
+                        .especialidad(c.getEspecialidad())
                         .build()
         ).collect(Collectors.toList());
     }
@@ -114,6 +118,8 @@ public class CitaService {
                         .fechaCita(c.getFechaCita())
                         .fechaReserva(c.getFechaReserva())
                         .estado(c.getEstado())
+                        .modalidad(c.getModalidad())
+                        .especialidad(c.getEspecialidad())
                         .build()
         ).collect(Collectors.toList());
     }
@@ -128,6 +134,8 @@ public class CitaService {
                         .fechaCita(c.getFechaCita())
                         .fechaReserva(c.getFechaReserva())
                         .estado(c.getEstado())
+                        .modalidad(c.getModalidad())
+                        .especialidad(c.getEspecialidad())
                         .build()
         ).collect(Collectors.toList());
     }
@@ -143,6 +151,7 @@ public class CitaService {
                         .fechaReserva(c.getFechaReserva())
                         .estado(c.getEstado())
                         .modalidad(c.getModalidad())
+                        .especialidad(c.getEspecialidad())
                         .build());
     }
 

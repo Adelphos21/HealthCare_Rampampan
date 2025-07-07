@@ -2,6 +2,7 @@ package com.healthcare.healthcare.cita.dto;
 
 import com.healthcare.healthcare.cita.entity.EstadoCita;
 import com.healthcare.healthcare.cita.entity.ModalidadCita;
+import com.healthcare.healthcare.medico.entity.Especialidad;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,5 +18,6 @@ public class CitaResponse {
     private LocalDate fechaReserva;
     private LocalDate fechaCita;
     private ModalidadCita modalidad;
+    private Especialidad especialidad;
     private EstadoCita estado;
 }
