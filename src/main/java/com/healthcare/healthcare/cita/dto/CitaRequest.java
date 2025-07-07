@@ -1,6 +1,7 @@
 package com.healthcare.healthcare.cita.dto;
 
 import com.healthcare.healthcare.cita.entity.ModalidadCita;
+import com.healthcare.healthcare.medico.entity.Especialidad;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,10 @@ public class CitaRequest {
 
     @NotNull(message = "La modalidad de la cita es obligatoria")
     private ModalidadCita modalidad;
+
+    @NotNull(message = "La especialidad de la cita es obligatoria")
+    private Especialidad especialidad;
+
     @NotNull(message = "La fecha de la cita es obligatoria")
     @Future(message = "La fecha de la cita debe ser futura")
     private LocalDate fechaCita;

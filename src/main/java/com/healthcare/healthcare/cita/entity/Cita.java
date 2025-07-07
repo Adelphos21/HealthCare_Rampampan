@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.cita.entity;
 
+import com.healthcare.healthcare.medico.entity.Especialidad;
 import com.healthcare.healthcare.medico.entity.Medico;
 import com.healthcare.healthcare.paciente.entity.Paciente;
 import com.healthcare.healthcare.pago.entity.Pago;
@@ -34,6 +35,10 @@ public class Cita {
 
     @Enumerated(EnumType.STRING)
     private ModalidadCita modalidad;
+
+    @Enumerated(EnumType.STRING)
+    private Especialidad especialidad;
+
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
