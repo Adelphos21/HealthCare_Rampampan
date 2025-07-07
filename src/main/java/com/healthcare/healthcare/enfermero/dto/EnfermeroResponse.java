@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.enfermero.dto;
 
+import com.healthcare.healthcare.usuario.entity.Role;
 import com.healthcare.healthcare.usuario.entity.Sexo;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,4 +18,5 @@ public class EnfermeroResponse {
     private Sexo sexo;
     private String area;
     private String correo;
+    private Role role;
 }

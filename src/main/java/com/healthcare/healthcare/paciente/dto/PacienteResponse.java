@@ -1,5 +1,6 @@
 package com.healthcare.healthcare.paciente.dto;
 
+import com.healthcare.healthcare.usuario.entity.Role;
 import com.healthcare.healthcare.usuario.entity.Sexo;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class PacienteResponse {
     private Sexo sexo;
     private String telefono;
     private String correo;
+    private Role role;
 }

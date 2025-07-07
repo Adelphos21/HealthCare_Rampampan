@@ -1,6 +1,7 @@
 package com.healthcare.healthcare.medico.dto;
 
 import com.healthcare.healthcare.medico.entity.Especialidad;
+import com.healthcare.healthcare.usuario.entity.Role;
 import com.healthcare.healthcare.usuario.entity.Sexo;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,4 +18,5 @@ public class MedicoResponse {
     private LocalDate fecha_nacimiento;
     private Sexo sexo;
     private Especialidad especialidad;
+    private Role role;
 }
