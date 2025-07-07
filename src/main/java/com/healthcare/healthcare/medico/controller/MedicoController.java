@@ -31,14 +31,14 @@ public class MedicoController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('PACIENTE')")
     public ResponseEntity<List<MedicoResponse>> listar() {
         List<MedicoResponse> medicos = medicoService.listar();
         return ResponseEntity.ok(medicos);
     }
 
     @GetMapping("/especialidad/{especialidad}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('PACIENTE')")
     public ResponseEntity<List<MedicoResponse>> listarPorEspecialidad(@PathVariable String nombre) {
         //Quitar tildes y minusculas
         String especialidad = Normalizer.normalize(nombre, Normalizer.Form.NFD)
