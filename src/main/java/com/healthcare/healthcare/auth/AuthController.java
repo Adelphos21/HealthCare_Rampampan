@@ -14,9 +14,11 @@ import com.healthcare.healthcare.usuario.dto.AdminResponse;
 import com.healthcare.healthcare.usuario.entity.Role;
 import com.healthcare.healthcare.usuario.entity.User;
 import com.healthcare.healthcare.usuario.repository.UserRepository;
+import com.healthcare.healthcare.usuario.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,7 @@ public class AuthController {
     private final PacienteRepository pacienteRepository;
     private final MedicoRepository medicoRepository;
     private final EnfermeroRepository enfermeroRepository;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -119,5 +122,11 @@ public class AuthController {
 
         }
         return null;
+    }
+    @GetMapping("/user/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        Object dto = userService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 }
